@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="neon-grid"></div>
+
+  <header class="navbar">
+
+    <h1 class="logo">AI Resume Analyzer</h1>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+
+  </header>
+
+
+  <section class="edit-profile-container">
+
+    <h2>Edit Profile</h2>
+
+    <div class="edit-profile-card">
+
+      <!-- Profile Image -->
+
+      <div class="profile-image-section">
+
+        <div class="avatar large-avatar">
+          M
+        </div>
+
+        <input type="file" id="profileImage" hidden>
+
+        <button class="profile-btn" onclick="document.getElementById('profileImage').click()">
+          Upload Photo
+        </button>
+
+      </div>
+
+
+      <!-- Profile Form -->
+
+      <form class="profile-form">
+
+        <label>Full Name</label>
+        <input type="text" value="Madhu">
+
+        <label>Email</label>
+        <input type="email" value="madhu25@gmail.com">
+
+        <label>Short Bio</label>
+        <textarea rows="3" placeholder="Tell us about yourself..."></textarea>
+
+        <label>Skills</label>
+        <input type="text" placeholder="JavaScript, React, Node.js">
+
+        <div class="form-actions">
+
+          <button type="submit" class="profile-btn">
+            Save Changes
+          </button>
+
+          <button type="button" class="profile-btn secondary">
+            Cancel
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 AI Resume Analyzer</p>
+  </footer>
+  <script src="js/api.js"></script>
+</body>
+
+</html>
