@@ -1,4 +1,4 @@
-const API_URL = "https://resume-backend-lvzo.onrender.com"
+const API_URL = "https://resume-backend.onrender.com/api"
 
 /* -------- AUTH -------- */
 
