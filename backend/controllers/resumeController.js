@@ -4,25 +4,24 @@ const analyzeResume = require("../services/aiAnalyzer");
 
 exports.uploadResume = async (req, res) => {
   try {
+
+    console.log("FILE RECEIVED:", req.file)
+
     if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "No file uploaded"
-      });
+      return res.status(400).json({ message: "No file uploaded" })
     }
 
-    const filePath = req.file.path;
+    const filePath = req.file.path
 
-    const text = await parseResume(filePath);
+    console.log("FILE PATH:", filePath)
 
-    if (!text || !text.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: "Could not extract text from resume"
-      });
-    }
+    const text = await parseResume(filePath)
 
-    const analysis = analyzeResume(text);
+    console.log("PARSED TEXT:", text?.slice(0, 100))
+
+    const analysis = analyzeResume(text)
+
+    console.log("ANALYSIS:", analysis)
 
     const resume = await Resume.create({
       userId: req.user.id,
@@ -32,25 +31,26 @@ exports.uploadResume = async (req, res) => {
       score: analysis.score || 0,
       jobRoles: analysis.jobRoles || [],
       suggestions: analysis.suggestions || []
-    });
+    })
 
-    return res.status(201).json({
+    console.log("SAVED RESUME:", resume)
+
+    res.json({
       success: true,
       message: "Resume analyzed successfully",
-      analysis,
       resume
-    });
-  } catch (error) {
-    console.error("uploadResume error:", error.message);
+    })
 
-    return res.status(500).json({
-      success: false,
+  } catch (error) {
+
+    console.error("UPLOAD ERROR:", error)
+
+    res.status(500).json({
       message: "Error analyzing resume",
       error: error.message
-    });
+    })
   }
-};
-
+}
 exports.getResumes = async (req, res) => {
   try {
     const resumes = await Resume.find({ userId: req.user.id })
