@@ -14,7 +14,7 @@ async function loginUser() {
     try{
 
       /* 🔥 CHECK IF USER HAS RESUMES */
-      const resumeRes = await fetch("http://localhost:5000/api/resume", {
+      const resumeRes = await fetch("https://resume-backend-lvzo.onrender.com/api/resume", {
         headers: {
           Authorization: "Bearer " + res.token
         }
