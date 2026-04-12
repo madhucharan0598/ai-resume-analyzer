@@ -26,25 +26,20 @@ dropZone.addEventListener("drop", function (e) {
 })
 
 async function uploadResume(){
-
   if(!uploadedFile){
     alert("Upload file first")
     return
   }
-
   try{
-
     const res = await uploadResumeAPI(uploadedFile)
-
-    console.log("Upload success:", res)
-
-    /* 🔥 DELAYED REDIRECT (FIXES YOUR ISSUE) */
+    console.log("Upload response:", res)
+    alert("Resume uploaded successfully!")
+    /* 🔥 FORCE REDIRECT */
     setTimeout(() => {
       window.location.href = "dashboard.html"
-    }, 300)
-
+    }, 500)
   }catch(error){
-    console.error(error)
-    alert("Upload failed")
+    console.error("Upload error:", error)
+    alert("Upload failed. Check backend connection.")
   }
 }
