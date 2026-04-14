@@ -1,45 +1,18 @@
-const dropZone = document.getElementById("dropZone")
-const fileInput = document.getElementById("resumeFile")
-const fileName = document.getElementById("fileName")
 let uploadedFile = null
-function selectFile() {
-  fileInput.click()
-}
-fileInput.addEventListener("change", function () {
-  uploadedFile = this.files[0]
-  fileName.innerText = uploadedFile.name
-})
 
-/* drag events */
-dropZone.addEventListener("dragover", function (e) {
-  e.preventDefault()
-  dropZone.classList.add("dragover")
-})
-dropZone.addEventListener("dragleave", function () {
-  dropZone.classList.remove("dragover")
-})
-dropZone.addEventListener("drop", function (e) {
-  e.preventDefault()
-  dropZone.classList.remove("dragover")
-  uploadedFile = e.dataTransfer.files[0]
-  fileName.innerText = uploadedFile.name
+function selectFile(){
+  document.getElementById("resumeFile").click()
+}
+
+document.getElementById("resumeFile").addEventListener("change",e=>{
+  uploadedFile = e.target.files[0]
 })
 
 async function uploadResume(){
-  if(!uploadedFile){
-    alert("Upload file first")
-    return
-  }
-  try{
-    const res = await uploadResumeAPI(uploadedFile)
-    console.log("Upload response:", res)
-    alert("Resume uploaded successfully!")
-    /* 🔥 FORCE REDIRECT */
-    setTimeout(() => {
-      window.location.href = "dashboard.html"
-    }, 500)
-  }catch(error){
-    console.error("Upload error:", error)
-    alert("Upload failed. Check backend connection.")
+
+  const res = await uploadResumeAPI(uploadedFile)
+
+  if(res.success){
+    window.location.href = "dashboard.html"
   }
 }
