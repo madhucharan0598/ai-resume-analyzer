@@ -1,68 +1,34 @@
-/**
- * AI Resume Analyzer (Rule-Based - Phase 1)
- */
+const analyzeResume = (text) => {
 
-function analyzeResume(text) {
+  const lower = text.toLowerCase()
 
-  text = text.toLowerCase()
+  const skillsList = ["javascript","react","node","mongodb","python","java","html","css"]
 
-  /* ------------------ SKILLS DATABASE ------------------ */
-  const skillsDB = [
-    "javascript","react","node","express","mongodb",
-    "python","java","c++","sql","aws","docker",
-    "machine learning","data science","html","css"
-  ]
+  const found = skillsList.filter(s => lower.includes(s))
 
-  /* ------------------ EXTRACT SKILLS ------------------ */
-  const skills = skillsDB.filter(skill => text.includes(skill))
+  let score = 40 + found.length * 8
+  if(lower.includes("project")) score += 10
+  if(lower.includes("experience")) score += 10
+  score = Math.min(score, 100)
 
-  /* ------------------ JOB ROLES ------------------ */
   let jobRoles = []
+  if(found.includes("react") && found.includes("node")) jobRoles.push("Full Stack Developer")
+  if(found.includes("javascript")) jobRoles.push("Frontend Developer")
+  if(found.includes("python")) jobRoles.push("Backend Developer")
 
-  if (skills.includes("react") || skills.includes("javascript")) {
-    jobRoles.push("Frontend Developer")
-  }
+  let companies = []
+  if(jobRoles.includes("Full Stack Developer")) companies.push("Google","Amazon","Microsoft")
+  if(jobRoles.includes("Frontend Developer")) companies.push("Meta","Netflix")
+  if(jobRoles.includes("Backend Developer")) companies.push("Uber","PayPal")
 
-  if (skills.includes("node") || skills.includes("express")) {
-    jobRoles.push("Backend Developer")
-  }
+  companies = [...new Set(companies)]
 
-  if (skills.includes("mongodb") && skills.includes("node")) {
-    jobRoles.push("Full Stack Developer")
-  }
-
-  if (skills.includes("python") && skills.includes("machine learning")) {
-    jobRoles.push("ML Engineer")
-  }
-
-  /* ------------------ SCORE ------------------ */
-  let score = Math.min(100, skills.length * 10)
-
-  /* ------------------ SUGGESTIONS ------------------ */
   let suggestions = []
+  if(found.length < 4) suggestions.push("Add more skills")
+  if(!lower.includes("project")) suggestions.push("Add projects")
+  if(!lower.includes("experience")) suggestions.push("Add experience")
 
-  if (!skills.includes("projects")) {
-    suggestions.push("Add project experience")
-  }
-
-  if (!skills.includes("github")) {
-    suggestions.push("Include GitHub profile")
-  }
-
-  if (skills.length < 5) {
-    suggestions.push("Add more technical skills")
-  }
-
-  if (!text.includes("experience")) {
-    suggestions.push("Mention work experience clearly")
-  }
-
-  return {
-    skills,
-    jobRoles,
-    score,
-    suggestions
-  }
+  return { skills: found, score, jobRoles, companies, suggestions }
 }
 
 module.exports = analyzeResume
