@@ -1,87 +1,24 @@
-const token = localStorage.getItem("token")
-
-if(!token){
-  alert("Please login first")
-  window.location.href = "login.html"
-}
-
 async function loadDashboard(){
 
-  try{
+  const data = await getResumesAPI()
 
-    console.log("🚀 Loading dashboard...")
+  const latest = data.resumes[0]
 
-    const data = await getResumesAPI()
+  document.getElementById("scoreText").innerText = latest.score + "%"
 
-    console.log("📦 API DATA:", data)
+  const skills = document.getElementById("skills")
+  latest.skills.forEach(s=>{
+    const span = document.createElement("span")
+    span.innerText = s
+    skills.appendChild(span)
+  })
 
-    if(!data.success){
-      alert("Error from server")
-      return
-    }
-
-    const resumes = data.resumes
-
-    if(!resumes || resumes.length === 0){
-      alert("No resumes found")
-      return
-    }
-
-    const latest = resumes[0]
-
-    console.log("📌 Latest:", latest)
-
-    /* ---------- SCORE ---------- */
-    document.getElementById("scoreText").innerText = latest.score + "%"
-
-    /* ---------- SKILLS ---------- */
-    const skillsContainer = document.getElementById("skills")
-    skillsContainer.innerHTML = ""
-
-    latest.skills.forEach(skill => {
-      const span = document.createElement("span")
-      span.className = "skill-tag"
-      span.innerText = skill
-      skillsContainer.appendChild(span)
-    })
-
-    /* ---------- JOB ROLES ---------- */
-    const jobs = document.getElementById("jobs")
-    jobs.innerHTML = ""
-
-    latest.jobRoles.forEach(job => {
-      const li = document.createElement("li")
-      li.innerText = job
-      jobs.appendChild(li)
-    })
-
-    /* ---------- SUGGESTIONS ---------- */
-    const tips = document.getElementById("tips")
-    tips.innerHTML = ""
-
-    latest.suggestions.forEach(tip => {
-      const li = document.createElement("li")
-      li.innerText = tip
-      tips.appendChild(li)
-    })
-
-    /* ---------- HISTORY ---------- */
-    const list = document.getElementById("resumeList")
-    list.innerHTML = ""
-
-    resumes.forEach(resume => {
-      const li = document.createElement("li")
-      li.innerText = `${resume.fileName} - Score: ${resume.score}%`
-      list.appendChild(li)
-    })
-
-  }catch(error){
-
-    console.error("❌ DASHBOARD ERROR:", error)
-
-    alert("Error loading dashboard")
-  }
+  const companies = document.getElementById("companies")
+  latest.companies.forEach(c=>{
+    const li = document.createElement("li")
+    li.innerText = c
+    companies.appendChild(li)
+  })
 }
 
-/* 🔥 ONLY CALL FUNCTION HERE */
 loadDashboard()
