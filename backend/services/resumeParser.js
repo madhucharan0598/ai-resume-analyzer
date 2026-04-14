@@ -1,39 +1,21 @@
 const fs = require("fs")
 const pdfParse = require("pdf-parse")
 const mammoth = require("mammoth")
-const path = require("path")
-
-async function parseResume(filePath) {
-
-  const ext = path.extname(filePath).toLowerCase()
-
+const parseResume = async (filePath) => {
   try {
-
-    /* PDF */
-    if (ext === ".pdf") {
-
-      const buffer = fs.readFileSync(filePath)
-
-      const data = await pdfParse(buffer)
-
+    const fileBuffer = fs.readFileSync(filePath)
+    if (filePath.endsWith(".pdf")) {
+      const data = await pdfParse(fileBuffer)
       return data.text
     }
-
-    /* DOCX */
-    if (ext === ".docx") {
-
-      const result = await mammoth.extractRawText({ path: filePath })
-
-      return result.value
+    if (filePath.endsWith(".docx")) {
+      const data = await mammoth.extractRawText({ buffer: fileBuffer })
+      return data.value
     }
-
-    throw new Error("Unsupported file format")
-
-  } catch (err) {
-
-    console.error("Parse Error:", err.message)
-    throw err
+    return ""
+  } catch (error) {
+    console.error("Parsing error:", error)
+    return ""
   }
 }
-
 module.exports = parseResume
