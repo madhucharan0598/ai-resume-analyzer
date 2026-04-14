@@ -1,16 +1,11 @@
-const express = require("express")
-const router = express.Router()
-
-const upload = require("../services/multerConfig")
+const router = require("express").Router()
+const multer = require("multer")
 const auth = require("../middleware/authMiddleware")
 
-/* ✅ IMPORT BOTH FUNCTIONS */
-const {
-  uploadResume,
-  getResumes
-} = require("../controllers/resumeController")
+const { uploadResume, getResumes } = require("../controllers/resumeController")
 
-/* ROUTES */
+const upload = multer({ dest:"uploads/" })
+
 router.post("/", auth, upload.single("resume"), uploadResume)
 router.get("/", auth, getResumes)
 
