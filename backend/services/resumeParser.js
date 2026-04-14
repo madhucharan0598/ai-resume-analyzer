@@ -1,21 +1,22 @@
 const fs = require("fs")
 const pdfParse = require("pdf-parse")
 const mammoth = require("mammoth")
+
 const parseResume = async (filePath) => {
-  try {
-    const fileBuffer = fs.readFileSync(filePath)
-    if (filePath.endsWith(".pdf")) {
-      const data = await pdfParse(fileBuffer)
-      return data.text
-    }
-    if (filePath.endsWith(".docx")) {
-      const data = await mammoth.extractRawText({ buffer: fileBuffer })
-      return data.value
-    }
-    return ""
-  } catch (error) {
-    console.error("Parsing error:", error)
-    return ""
+
+  const buffer = fs.readFileSync(filePath)
+
+  if(filePath.endsWith(".pdf")){
+    const data = await pdfParse(buffer)
+    return data.text
   }
+
+  if(filePath.endsWith(".docx")){
+    const data = await mammoth.extractRawText({ buffer })
+    return data.value
+  }
+
+  return ""
 }
+
 module.exports = parseResume
